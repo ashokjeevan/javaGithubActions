@@ -10,7 +10,7 @@ on:
 
 env:
   AWS_DEFAULT_REGION: ca-central-1
-  AWS_DEFAULT_OTPUT: json
+  AWS_DEFAULT_OUTPUT: json
   AWS_ACCOUNT_ID: ${{secrets.AWS_ACCOUNT_ID}}
   AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY}}
   AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
@@ -37,3 +37,9 @@ jobs:
     - name: Push image
       if: github.ref == 'refs/heads/master'
       run: docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE
+
+    - name: Print stuffs
+      run: |
+        echo $github.token 
+        echo $AWS_DEFAULT_REGION
+        echo $github.event
