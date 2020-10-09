@@ -1,0 +1,39 @@
+name: Build and push the Docker image to AWS ECR
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+env:
+  AWS_DEFAULT_REGION: ca-central-1
+  AWS_DEFAULT_OTPUT: json
+  AWS_ACCOUNT_ID: ${{secrets.AWS_ACCOUNT_ID}}
+  AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY}}
+  AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+  CONTAINER_IMAGE: javagithubactions:${{ github.sha }}
+
+jobs:
+  build-and-push-docker-image:
+    name: Build and push docker image to ECR
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Checkout git
+      uses: actions/checkout@master
+
+    - name: ECR setup
+      run: $( aws ecr get-login --no-include-email )
+    
+    - name: Build docker image
+      run: |
+        docker build \
+        -t $CONTAINER_IMAGE \
+        -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE .
+
+    - name: Push image
+      if: github.ref == 'refs/heads/master'
+      run: docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE

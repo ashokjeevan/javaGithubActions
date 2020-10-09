@@ -1,0 +1,2 @@
+com/valhalla/initial/MyProjectApplicationTests.java
+ com.valhalla.initial.MyProjectApplicationTests
