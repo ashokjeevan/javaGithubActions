@@ -40,6 +40,6 @@ jobs:
 
     - name: Print stuffs
       run: |
-        echo $github.token 
+        echo ${{ github.token }} 
         echo $AWS_DEFAULT_REGION
-        echo $github.event
+        echo ${{ github.event }}
